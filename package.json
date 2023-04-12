@@ -1,0 +1,23 @@
+{
+  "name": "auto-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon server.js",
+    "client": "cd front-end && npm start",
+    "dev": "concurrently \"npm run server\" \" npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
