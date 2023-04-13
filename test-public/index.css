@@ -1,0 +1,34 @@
+.container {
+    margin-top:2rem;
+}
+
+
+form {
+    width:600px;
+    margin:auto;
+    
+}
+.row{
+   
+    position: relative;
+}
+
+.row select {
+    position: absolute;
+    right:8rem;
+   
+    width:10rem;
+}
+
+.row #EC2_name{
+    position: absolute;
+    right:8rem;
+    
+    width:10rem;
+}
+
+.buttonHolder{
+    text-align: center;
+
+   
+}
