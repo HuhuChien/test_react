@@ -1,0 +1,125 @@
+
+
+
+.the_navbar{
+    margin-top: 1.5rem;
+    max-width: 100rem;
+   
+} 
+
+.navbar li a {
+    color:white; 
+    font-size:1.2rem;
+    /* font-family: "微軟正黑體", "Segoe UI"; */
+    font-family:"ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji";
+    font-weight: 400;
+
+}
+
+
+.main {
+  
+    color:#fff;
+    background-color: #F05220;
+   
+    margin-right:2rem;
+    font-family:"微軟正黑體", "Segoe UI"; 
+    font-family:"Arial, sans-serif";
+    font-weight: 700;
+    font-size: 1rem;
+    border:1px solid #e5e5e5;;
+    margin-top:1rem;
+    width:10rem;
+
+}  
+
+/* .main.start{
+    font-size: 1rem;
+    color:#fff;
+    font-weight: 1200;
+ 
+} */
+.no-data-parent{
+    position: relative;
+}
+
+.no-data{
+   
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+#the_form {
+    margin:2.5rem;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+
+} 
+
+.button-group > .btn-secondary{
+    margin-left:2rem;
+
+}
+
+.form-check{
+    padding-left:0
+}
+
+.form-check-input{
+    margin-left: 2rem;
+}
+
+.page ul {
+    float:right;
+    font-size:13px;
+}
+
+
+
+
+
+
+.table.create{
+    margin-top:2rem;
+
+}
+
+.dropdown-menu {
+   min-width: auto;
+} 
+
+
+
+
+.before-footer-space{
+    min-height: 20vh;
+}
+
+.last-footer{ 
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 50px;
+    color: white;
+    text-align: center;
+    
+   
+}
+
+
+
+
+
+table th,
+table td {
+  
+ 
+  width: 250px;
+  text-align: center;
+} 
