@@ -15,7 +15,10 @@ const EmptyTableList = () => {
             </tr>
           </thead>
           <tbody className='s'>
+            <tr>
                 <td className='no-data'>無資料</td>
+            </tr>
+               
     
           </tbody>
         </table>

@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import EC2TableList from './EC2TableList'
+import EC2TableList2 from './EC2TableList2'
 const ShowEC2Table = ({query}) => {
  
 
@@ -13,7 +13,7 @@ useEffect(() => {
   return <>
       <div>banana</div>
       
-      {/* <EC2TableList />  */}
+      {/* <EC2TableList2 />   */}
   </>
    
   

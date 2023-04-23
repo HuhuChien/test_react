@@ -1,17 +1,13 @@
-import React,{useContext} from 'react'
+import React from 'react'
 
-import {EC2Context} from './CreateEC2.js'
+
 import data from './adjust_format.json'
 import { AiFillCheckSquare  } from "react-icons/ai";
 import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
 
-const EC2TableSingle = ({ID,number,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,deleteEC2}) => {
-   //const [state,dispatch] = useReducer(reducer,defaultState)
-  
-    const receiveData = useContext(EC2Context)
-
-   //console.log(receiveData.allEC2)
+const EC2TableSingle = ({ID,number,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2}) => {
+   
 
 
     let new_OS = data[0][OS]
@@ -43,7 +39,10 @@ const EC2TableSingle = ({ID,number,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,dele
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                       <a className="dropdown-item" href="#/" onClick={() => deleteEC2(ID)}>刪除</a>
-                      <a className="dropdown-item" href="#/">修改</a>
+                   
+                      <a className="dropdown-item" href="#/" onClick={() => editEC2(ID)}>修改</a> 
+
+                    
                     </div>
               </td>
               

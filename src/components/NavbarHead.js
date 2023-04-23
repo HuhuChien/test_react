@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link,NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 const NavbarHead = () => {
   return<>
  
@@ -18,7 +18,7 @@ const NavbarHead = () => {
     <li className="nav-item nav-link">
 
           <i className="fa fa-envelope-o nav-link">
-              <NavLink to="/ec2">
+              <NavLink to="/">
                   <div>新建雲端主機</div> 
               </NavLink>
           </i>

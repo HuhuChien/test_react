@@ -1,31 +1,28 @@
 import React,{useContext} from 'react'
 import { EC2Context } from './CreateEC2'
-//import $ from 'jquery'; 
-
-
-const EC2Form = ({server_name_default,os_default,resource_default,subnet_default,check_default,os_ChangeHandler,instance_type_ChangeHandler,handle_Submit,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler}) => {
-  
-
-const receiveData = useContext(EC2Context)
-console.log(receiveData)
 
 
 
+const EditEC2Form = ({server_name_default,os_default,resource_default,subnet_default,check_default,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler}) => {
+    const receiveData = useContext(EC2Context)
+    console.log(receiveData)
+ 
+ 
+ 
+ return <>
+          <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
+              {receiveData.allEC2.length > 0 && 
+          <button type="button" className="main">送出</button>
+        }
 
-  return <>
-      
-      <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
-      {receiveData.allEC2.length > 0 && 
-      <button type="button" className="main">送出</button>
-      }
-      <div className="modal fade form_modal" id="form_modal" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div className="modal fade form_modal" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
         <div className="modal-dialog modal-xl">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
-              <form className="form" method="POST" id="the_form" onSubmit={handle_Submit}>
+              <form className="form" method="POST" id="the_form" onSubmit={handle_Update}>
     
 
                       {/* <div className="form-row">
@@ -108,7 +105,7 @@ console.log(receiveData)
                       
                       
                       <div className="button-group">
-                        <button type="submit" id="save" className="btn btn-primary">儲存</button>
+                        <button type="submit" id="save" className="btn btn-primary">更新</button>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancel()}>取消</button>
 
                       </div>
@@ -117,12 +114,9 @@ console.log(receiveData)
           </div>
         </div>
       </div>
-
-
-    
-
-
-</>
+  
+  
+  </>
 }
 
-export default EC2Form
+export default EditEC2Form
