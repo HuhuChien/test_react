@@ -4,8 +4,40 @@
 .the_navbar{
     margin-top: 1.5rem;
     max-width: 100rem;
-   
+    /* position: relative; */
 } 
+
+
+
+.search {
+    position: absolute;
+    top:45px;
+    right:30px;
+}
+
+
+
+@media screen and (min-width:766px) and (max-width:995px){ 
+    .search{
+        top:45px;
+        right:30px;
+      
+    }
+  }
+
+  @media screen and (max-width:766px){ 
+    .search{
+        display: flex;
+        top:33px;
+        right:30px;
+        width:auto;
+        
+    }
+
+  } 
+  
+
+
 
 .navbar li a {
     color:white; 
@@ -60,6 +92,11 @@
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 
 } 
+
+
+.alarm{
+    border-color: red;
+}
 
 .button-group > .btn-secondary{
     margin-left:2rem;

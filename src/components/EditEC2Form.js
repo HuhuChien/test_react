@@ -1,42 +1,34 @@
-import React,{useContext, useEffect} from 'react'
+import React,{useContext} from 'react'
 import { EC2Context } from './CreateEC2'
-//import $ from 'jquery'; 
-
-
-const EC2Form = ({demand,demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,
-  demand_ChangeHandler,ec2_Name_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Submit,
-  cancel,ip_ChangeHandler,subnet_ChangeHandler}) => {
-
-const receiveData = useContext(EC2Context)
 
 
 
-  return <>
-      
-      <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
-      {receiveData.allEC2.length > 0 && 
-      <button type="button" className="main">送出</button>
-      }
-      <div className="modal fade form_modal" id="form_modal" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+const EditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler}) => {
+    const receiveData = useContext(EC2Context)
+    console.log(receiveData)
+ 
+ 
+ 
+ return <>
+          <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
+              {receiveData.allEC2.length > 0 && 
+          <button type="button" className="main">送出</button>
+        }
+
+        <div className="modal fade form_modal" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
         <div className="modal-dialog modal-xl">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
-              <form className="form" method="POST" id="the_form" onSubmit={handle_Submit}>
+              <form className="form" method="POST" id="the_form" onSubmit={handle_Update}>
     
 
-
-                   
-                      <div className="form-row">
+                     <div className="form-row">
                         <div className="form-group col-md-4">
                           <label htmlFor="demand">需求單單號</label>
-                          {
-                            demand ? <input type="text" value={demand} name="demand" className="form-control" id="demand" onChange={demand_ChangeHandler} ref={demand_default}/>
-                            :   <input type="text" name="demand" value="" className="form-control" id="demand" onChange={demand_ChangeHandler} ref={demand_default}/>
-                          }
-                        
+                          <input type="text" name="demand" className="form-control" id="demand" onChange={demand_ChangeHandler} ref={demand_default}/>
                         </div>
                       </div> 
 
@@ -113,7 +105,7 @@ const receiveData = useContext(EC2Context)
                       
                       
                       <div className="button-group">
-                        <button type="submit" id="save" className="btn btn-primary">儲存</button>
+                        <button type="submit" id="save" className="btn btn-primary">更新</button>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancel()}>取消</button>
 
                       </div>
@@ -122,12 +114,9 @@ const receiveData = useContext(EC2Context)
           </div>
         </div>
       </div>
-
-
-    
-
-
-</>
+  
+  
+  </>
 }
 
-export default EC2Form
+export default EditEC2Form

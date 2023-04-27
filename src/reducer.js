@@ -21,6 +21,22 @@ const reducer = (state,action) => {
     } 
 
 
+    if(action.type === 'UPDATE_EC2'){
+        const {ID} = action.payload
+        console.log(ID)
+        const index = state.allEC2.findIndex((item) => {
+            return item.ID === ID
+        })
+        console.log(index)
+        console.log(action.payload)
+        state.allEC2.splice(index,1,action.payload)
+
+        return {...state} 
+
+
+     } 
+
+
 
         
         

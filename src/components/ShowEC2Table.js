@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import EC2TableList from './EC2TableList'
+
 const ShowEC2Table = ({query}) => {
  
 
@@ -11,9 +11,9 @@ useEffect(() => {
 
 
   return <>
-      <div>banana</div>
+      <div>1.從資料庫抓取資料來顯示</div>
       
-      {/* <EC2TableList />  */}
+    
   </>
    
   

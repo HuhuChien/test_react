@@ -1,18 +1,18 @@
 
-import React,{ useReducer,forwardRef,useImperativeHandle,useRef,useEffect,useCallback,useContext,useState } from 'react'
+import React,{ useEffect,useContext,useState } from 'react'
 import EC2TableSingle from './EC2TableSingle'
 import { EC2Context } from './CreateEC2'
 import {VscChevronLeft,VscChevronRight} from "react-icons/vsc";
 
 
 
-const EC2TableList = ({deleteEC2,setQuery2,triggerNext,triggerPrevious}) => {
+const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious}) => {
 
 
   const receiveData = useContext(EC2Context)
   
   const [currentPage,setCurrentPage] = useState(1)
-  const recordsPerPage = 3
+  const recordsPerPage = 5
   
   const lastIndex = currentPage * recordsPerPage
   const firstIndex = lastIndex - recordsPerPage //例如:10-5=5。第2頁的第1個
@@ -111,7 +111,7 @@ const EC2TableList = ({deleteEC2,setQuery2,triggerNext,triggerPrevious}) => {
         <table className="table create">
           <thead className="">
             <tr>
-              <th scope="col">項次</th>
+              <th scope="col">需求單單號</th>
               <th scope="col">雲端主機名稱</th>
               <th scope="col">雲端主機OS</th>
               <th scope="col">雲端主機Resource</th>
@@ -125,7 +125,7 @@ const EC2TableList = ({deleteEC2,setQuery2,triggerNext,triggerPrevious}) => {
                 {records.map((ec2,index) => {
                     console.log(ec2)
           
-                      return <EC2TableSingle key={ec2.ID} {...ec2} number={index} deleteEC2={deleteEC2}/>
+                      return <EC2TableSingle key={ec2.ID} {...ec2} number={index} deleteEC2={deleteEC2} editEC2={editEC2} />
                     
                     
                 })
