@@ -1,6 +1,6 @@
 import React,{useContext,useEffect,useState} from 'react'
 import { EC2Context } from './CreateEC2'
-import EC2TableList from './EC2TableList'
+
 const Search = ({search_default,deleteEC2,editEC2,setQuery3,triggerNext,triggerPrevious}) => {
 
 

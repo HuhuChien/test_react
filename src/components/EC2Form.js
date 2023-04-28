@@ -1,5 +1,6 @@
-import React,{useContext, useEffect} from 'react'
+import React,{useContext,useState} from 'react'
 import { EC2Context } from './CreateEC2'
+import axios from 'axios';
 //import $ from 'jquery'; 
 
 
@@ -8,6 +9,37 @@ const EC2Form = ({demand,demand_default,server_name_default,os_default,resource_
   cancel,ip_ChangeHandler,subnet_ChangeHandler}) => {
 
 const receiveData = useContext(EC2Context)
+  const [loading,setLoading] = useState(false)
+  const handle_Submit_DB = (e) => {
+  
+    let payload = receiveData.allEC2
+    const url = 'http://localhost:5020/task'
+    receiveData.allEC2.forEach((item,index) => {
+      console.log('ss')
+     axios.post(url,{
+        demand:payload[index].DEMAND,
+        server_name:payload[index].EC2NAME,
+        ami:payload[index].OS,
+        instance_type:payload[index].RESOURCE,
+        subnet:payload[index].SUBNET,
+      })
+      .then(function (response) {
+          setLoading(true)
+          console.log("cool")
+          console.log(response);
+      
+        })
+      .catch(function (error) {
+          console.log(error);
+        })
+      .finally(() => {
+        setLoading(false)
+      })
+     
+    })
+    console.log('no')
+  }
+
 
 
 
@@ -15,8 +47,11 @@ const receiveData = useContext(EC2Context)
       
       <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
       {receiveData.allEC2.length > 0 && 
-      <button type="button" className="main">送出</button>
+      <button type="button" className="main" onClick={handle_Submit_DB}>送出</button>
       }
+
+
+      
       <div className="modal fade form_modal" id="form_modal" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
         <div className="modal-dialog modal-xl">
@@ -53,7 +88,7 @@ const receiveData = useContext(EC2Context)
 
                       <div className="form-row">
                         <div className="form-group col-md-4">
-                          <label htmlFor="ami">雲端主機OS</label>
+                          <label htmlFor="ami">雲端主機作業系統</label>
                           <select name="ami" id="instance_type" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
                             <option value="ami-006e00d6ac75d2ebb">Ubuntu 20.04 LTS</option>
                             <option value="ami-007855ac798b5175e">Ubuntu 22.04 LTS</option>
@@ -65,7 +100,7 @@ const receiveData = useContext(EC2Context)
                       </div>
                       <div className="form-row">
                         <div className="form-group col-md-4">
-                          <label htmlFor="instance_type">雲端主機Resource</label>
+                          <label htmlFor="instance_type">雲端主機規格</label>
                           <select name="subnet" id="instance_type" className="form-control" onChange={instance_type_ChangeHandler} ref={resource_default}>
                               <option value="t1.micro">1vCPU 0.612GB Mem</option>
                               <option value="t2.nano">1vCPU 0.5GB Mem</option>

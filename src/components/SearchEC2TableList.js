@@ -1,5 +1,5 @@
 import React from 'react'
-import data from './adjust_format.json'
+//import data from './adjust_format.json'
 import SearchEC2TableSingle from './SearchEC2TableSingle'
 
 

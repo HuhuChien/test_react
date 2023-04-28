@@ -2,11 +2,11 @@ import React from 'react'
 import {NavLink} from 'react-router-dom'
 const NavbarHead = ({query}) => {
   
-  const handle_Search = (e) => {
-    e.preventDefault()
-    console.log('searching......')
-    console.log(query)
-  }
+  // const handle_Search = (e) => {
+  //   e.preventDefault()
+  //   console.log('searching......')
+  //   console.log(query)
+  // }
   
   
   return<>
