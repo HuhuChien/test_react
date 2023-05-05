@@ -7,8 +7,8 @@ const EmptyTableList = () => {
             <tr>
               <th scope="col">需求單單號</th>
               <th scope="col">雲端主機名稱</th>
-              <th scope="col">雲端主機OS</th>
-              <th scope="col">雲端主機Resource</th>
+              <th scope="col">雲端主機作業系統</th>
+              <th scope="col">雲端主機規格</th>
               <th scope="col">網段</th>
               <th scope="col">對外IP</th>
               <th scope="col">進階</th>

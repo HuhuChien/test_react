@@ -1,6 +1,6 @@
 import React,{useContext,useState} from 'react'
 import { EC2Context } from './CreateEC2'
-import axios from 'axios';
+
 //import $ from 'jquery'; 
 
 
@@ -9,55 +9,23 @@ const EC2Form = ({demand,demand_default,server_name_default,os_default,resource_
   cancel,ip_ChangeHandler,subnet_ChangeHandler}) => {
 
 const receiveData = useContext(EC2Context)
-  const [loading,setLoading] = useState(false)
-  const handle_Submit_DB = (e) => {
-  
-    let payload = receiveData.allEC2
-    const url = 'http://localhost:5020/task'
-    receiveData.allEC2.forEach((item,index) => {
-      console.log('ss')
-     axios.post(url,{
-        demand:payload[index].DEMAND,
-        server_name:payload[index].EC2NAME,
-        ami:payload[index].OS,
-        instance_type:payload[index].RESOURCE,
-        subnet:payload[index].SUBNET,
-      })
-      .then(function (response) {
-          setLoading(true)
-          console.log("cool")
-          console.log(response);
-      
-        })
-      .catch(function (error) {
-          console.log(error);
-        })
-      .finally(() => {
-        setLoading(false)
-      })
-     
-    })
-    console.log('no')
-  }
+ 
 
 
 
 
   return <>
       
-      <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
-      {receiveData.allEC2.length > 0 && 
-      <button type="button" className="main" onClick={handle_Submit_DB}>送出</button>
-      }
+ 
 
 
       
-      <div className="modal fade form_modal" id="form_modal" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+      <div className="modal fade form_modal" id="form_modal" tabIndex="-1" data-backdrop="static" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
         <div className="modal-dialog modal-xl">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">&times;</span>
           </button>
               <form className="form" method="POST" id="the_form" onSubmit={handle_Submit}>
     

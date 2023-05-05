@@ -74,7 +74,7 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious})
   },[triggerPrevious])
 
 
-  console.log(receiveData.allEC2.keys())
+
   
   return <>
   {receiveData.allEC2.length > 0 &&
@@ -113,8 +113,8 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious})
             <tr>
               <th scope="col">需求單單號</th>
               <th scope="col">雲端主機名稱</th>
-              <th scope="col">雲端主機OS</th>
-              <th scope="col">雲端主機Resource</th>
+              <th scope="col">雲端主機作業系統</th>
+              <th scope="col">雲端主機規格</th>
               <th scope="col">網段</th>
               <th scope="col">對外IP</th>
               <th scope="col">進階</th>
@@ -123,7 +123,6 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious})
           <tbody>
 
                 {records.map((ec2,index) => {
-                    console.log(ec2)
           
                       return <EC2TableSingle key={ec2.ID} {...ec2} number={index} deleteEC2={deleteEC2} editEC2={editEC2} />
                     

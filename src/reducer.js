@@ -36,9 +36,15 @@ const reducer = (state,action) => {
 
      } 
 
+    if(action.type === 'DELETE_ALL_EC2'){
+      
+        return {...state,allEC2:[],subnet:''} //先抓出全部的state內容後，再去更新allEC2
 
 
-        
+    } 
+
+      
+ 
         
 }
 

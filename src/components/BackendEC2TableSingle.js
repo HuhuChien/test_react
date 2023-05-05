@@ -1,46 +1,61 @@
 import React from 'react'
+
+
 import data from './adjust_format.json'
 import { AiFillCheckSquare  } from "react-icons/ai";
 import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
 
+const ApplyEC2TableSingle = ({_id,demand,server_name
+  ,ami,instance_type,APPLY_DATE,subnet
+  ,ip,deleteEC2}) => {
+   
 
 
-const SearchEC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2}) => {
+    let new_OS = data[0][ami]
+    let new_RESOURCE= data[1][instance_type]
+    
 
 
-    let new_OS = data[0][OS]
-    let new_RESOURCE= data[1][RESOURCE]
-  return <>
-       <tr>
-              <td>
-                  {DEMAND}
+
+
+    return <>
+          <tr>
+
+             <td>
+                  {demand}
              </td>
              
-              <td>{EC2NAME}</td>
+              <td>{server_name}</td>
               <td>{new_OS}</td>
               <td>{new_RESOURCE}</td>
-              <td>{SUBNET}</td>
-              {IP === true ? 
+              <td>{subnet}</td>
+              {ip === true ? 
 
               <td><AiFillCheckSquare /></td>
               :<td><MdOutlineDangerous /></td>
             }
       
-
-     
-             <td className="nav-item dropdown">
+              <td className="nav-item dropdown">
                     <a className="" href="#/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <FiMoreVertical />
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a className="dropdown-item" href="#/" onClick={() => editEC2(ID)}>修改</a> 
-                      <a className="dropdown-item" href="#/" onClick={() => deleteEC2(ID)}>刪除</a>
+                      <a className="dropdown-item" href="#/" >修改</a> 
+                      <a className="dropdown-item" href="#/" onClick={() => deleteEC2(_id)}>刪除</a>
                     </div>
               </td>
+  
               
         </tr>
+
+
+
+         
+
+
+
   </>
 }
 
-export default SearchEC2TableSingle
+export default ApplyEC2TableSingle

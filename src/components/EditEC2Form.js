@@ -8,12 +8,9 @@ const EditEC2Form = ({demand_default,server_name_default,os_default,resource_def
     console.log(receiveData)
  
 
- 
+    //data-backdrop="static"
  return <>
-          <button type="button" className="main start" id="click-modal">開始建立主機</button>
-              {receiveData.allEC2.length > 0 && 
-          <button type="button" className="main">送出</button>
-        }
+   
 
         <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
