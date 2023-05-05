@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');
-const dateTaipei = moment.tz(Date.now(), "Asia/Taipei").format();
 
-console.log(dateTaipei)
+
 
 
 const Terraform_data_Schemma = new mongoose.Schema({
@@ -35,12 +34,21 @@ const Terraform_data_Schemma = new mongoose.Schema({
         required:[true,'must provide subnet'],
      
     },
+    ip: {
+        type:Boolean,
+        required:[true,'must provide ip'],
+     
+    },
     created_date: {
-        type: String, 
-        default: dateTaipei
+        type: String,
+        default: () => moment.tz(Date.now(), "Asia/Taipei").format()
     },
    
-    updated_date: {type: String, default: dateTaipei}
+    updated_date: {
+        type: String, 
+        default: () => moment.tz(Date.now(), "Asia/Taipei").format()
+    },
+
 
 })
 
