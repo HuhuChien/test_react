@@ -55,6 +55,18 @@ const NavbarHead = ({query}) => {
     
     </li>
 
+
+    <li className="nav-item nav-link">
+      
+   
+      <i className="fa fa-envelope-o nav-link">
+          <NavLink to="/backend">
+              <div>後台管理</div>     
+          </NavLink>
+      </i>
+  
+  </li>
+
     </ul>
 
     {/* <form className="form-inline my-2 my-lg-0" onSubmit={handle_Search}>

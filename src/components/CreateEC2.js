@@ -28,7 +28,7 @@ const CreateEC2 = ({setQuery}) => {
   const [ip,setIp] = useState(false)
   const [edit,setEdit] = useState(false)
   const [loading,setLoading] = useState(false)
-  const [intervalid,setIntervalid] = useState('')
+
   const [theId,setTheid] = useState('')
   const demand_default = useRef(null)
   const server_name_default = useRef(null)
@@ -37,6 +37,9 @@ const CreateEC2 = ({setQuery}) => {
   const resource_default = useRef(null)
   const check_default = useRef(null)
   const search_default = useRef(null)
+  const spinner_default = useRef(null)
+
+
 
   let defaultState = {
     allEC2: [],
@@ -51,10 +54,10 @@ const CreateEC2 = ({setQuery}) => {
     const data = JSON.parse(localStorage.getItem('all'))
     
     if(!data){
-      
+
       return 
     } else {
-  
+    
       state.allEC2 = data.allEC2
     }
    
@@ -108,15 +111,12 @@ const CreateEC2 = ({setQuery}) => {
       check_default.current.checked = false
     }
 
-
-  
-
     dispatch({type:"SUBNET_UPDATE",payload:e.target.value})
 }
 
 
 
-
+//好像沒用到 20230507
   const ip_ChangeHandler = (e) => {
   setIp(!ip)
 }
@@ -278,87 +278,105 @@ const CreateEC2 = ({setQuery}) => {
   
   const handle_Submit_DB =async(e) => {
     try{
-      for await (const[i,value] of state.allEC2.entries()){
+       for (const[i,value] of state.allEC2.entries()){
         let payload = state.allEC2
+        console.log(payload)
         const url = 'http://localhost:5020/task'
         console.log('loop')
-        await axios.post(url,{
+      await axios.post(url,{
           demand:payload[i].DEMAND,
           server_name:payload[i].EC2NAME,
           ami:payload[i].OS,
           instance_type:payload[i].RESOURCE,
           subnet:payload[i].SUBNET,
+          ip:payload[i].IP
         })
+
       }
-      console.log('done1')
-      await setInterval(() => setLoading(true),0)
-      //await setLoading(true)
-      //setIntervalid(a)
-      console.log('done2')
-      setTimeout(() => dispatch({type:"DELETE_ALL_EC2"}),3000)
-      console.log('done3')
-  
-      setLoading(false) //沒有效果，是靠reload，loading才變成false
-      setTimeout(() =>window.location.reload(false),3000)
-      
     
-      console.log('done4')
+
+  await new Promise((resolve, reject) => {
+  
+    resolve(setLoading(true));
+        console.log('done1')
+    });
+
+
+     
+    
+      
+  await new Promise((resolve, reject) => {
+        setTimeout(() => {
+             resolve(dispatch({type:"DELETE_ALL_EC2"}));
+             console.log('done2')
+        }, 3000);
+        
+    });
+     
+  
+
+  await new Promise((resolve, reject) => {
+    resolve(setLoading(false));
+    console.log('done3')
+      })
+    
+
+  await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(window.alert('資料已完成上傳'));
+        console.log('done4')
+      },1000)
+      setDemand('')
+  })
+
+    
     }catch(error){
       console.log(error.name)
-
-    }
-
-
-  
-  
-  
-   
-
-
+ 
+      window.alert('無法成功上傳資料，請稍後再試，或請通知系統管理課')
   }
   
+  }
 
-   
+
   
 
   return <>
-
+    <EC2Context.Provider value={state}>
     
-      <button type="button" className="main start" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
-      {state.allEC2.length > 0 && 
-      <button type="button" className="main" onClick={handle_Submit_DB}>送出</button>
-      }
-      
-       <EC2Context.Provider value={state}>
-       {/* 要再確認EditEC2Form的props那些要留 20230423*/}
-       {edit ? <EditEC2Form demand_default={demand_default} server_name_default={server_name_default} 
-       os_default={os_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler}
-       ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
-        ip_ChangeHandler={ip_ChangeHandler} cancel={cancel} handle_Update={handle_Update} /> 
-        
-        : <EC2Form demand={demand} demand_default={demand_default} server_name_default={server_name_default} os_default={os_default}  
-        resource_default={resource_default} subnet_default={subnet_default} check_default={check_default}
-        demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
-        subnet_ChangeHandler={subnet_ChangeHandler} ip_ChangeHandler={ip_ChangeHandler} 
-         cancel={cancel} handle_Submit={handle_Submit}/>}
-        
-        <Search deleteEC2={deleteEC2} editEC2={editEC2} setQuery3={setQuery3} triggerNext={triggerNext} triggerPrevious={triggerPrevious} search_default={search_default}/>
-        
-
-        {query3.length > 0 ? <SearchEC2TableList query3={query3} deleteEC2={deleteEC2} editEC2={editEC2}/> : 
-        
-        
-        state.allEC2.length > 0 ? 
-          <EC2TableList deleteEC2={deleteEC2} editEC2={editEC2} setQuery2={setQuery2} triggerNext={triggerNext} triggerPrevious={triggerPrevious}/>
-          :
-          <EmptyTableList />
-         
-}
-      {loading ? <ClipLoader color="#36d7b7" /> : null}
-      
+          <button type="button" className="main" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
+          {state.allEC2.length > 0 && 
+          <button type="button" className="main" onClick={handle_Submit_DB}>送出</button>
+          }
+          
+          
+          {/* 要再確認EditEC2Form的props那些要留 20230423*/}
+          {edit ? <EditEC2Form demand_default={demand_default} server_name_default={server_name_default} 
+          os_default={os_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler}
+          ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
+            ip_ChangeHandler={ip_ChangeHandler} cancel={cancel} handle_Update={handle_Update} /> 
+            
+            : <EC2Form demand={demand} demand_default={demand_default} server_name_default={server_name_default} os_default={os_default}  
+            resource_default={resource_default} subnet_default={subnet_default} check_default={check_default}
+            demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
+            subnet_ChangeHandler={subnet_ChangeHandler} ip_ChangeHandler={ip_ChangeHandler} 
+            cancel={cancel} handle_Submit={handle_Submit}/>}
+            
+            <Search deleteEC2={deleteEC2} editEC2={editEC2} setQuery3={setQuery3} triggerNext={triggerNext} triggerPrevious={triggerPrevious} search_default={search_default}/>
+            
+          
+            {query3.length > 0 ? <SearchEC2TableList query3={query3} deleteEC2={deleteEC2} editEC2={editEC2}/> : 
+            
+            
+            state.allEC2.length > 0 ? 
+              <EC2TableList deleteEC2={deleteEC2} editEC2={editEC2} setQuery2={setQuery2} triggerNext={triggerNext} triggerPrevious={triggerPrevious}/>
+              :
+              <EmptyTableList />}
+           {loading && <div className="clip_loader"  ref={spinner_default}><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
+     
+     
       </EC2Context.Provider>
-
-       
+  
     </>
 }
 

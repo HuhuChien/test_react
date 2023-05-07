@@ -20,12 +20,12 @@ const receiveData = useContext(EC2Context)
 
 
       
-      <div className="modal fade form_modal" id="form_modal" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+      <div className="modal fade form_modal" id="form_modal" tabIndex="-1" data-backdrop="static" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
         <div className="modal-dialog modal-xl">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">&times;</span>
           </button>
               <form className="form" method="POST" id="the_form" onSubmit={handle_Submit}>
     

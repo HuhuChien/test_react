@@ -1,12 +1,17 @@
 import React,{useContext} from 'react'
-import { EC2Context } from './CreateEC2'
+import { BackendEC2Context } from './BackendEC2'
 
 
 
-const EditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler}) => {
-    const receiveData = useContext(EC2Context)
-    console.log(receiveData)
- 
+
+const BackendEditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,subnet}) => {
+   
+
+
+   
+  const receiveData = useContext(BackendEC2Context)
+  console.log(receiveData)
+
 
 
  return <>
@@ -83,7 +88,7 @@ const EditEC2Form = ({demand_default,server_name_default,os_default,resource_def
                       </div>
                      
                 
-                      {(receiveData.subnet === 'DMZ1' ||  receiveData.subnet === 'DMZ2') &&
+                       {(subnet === 'DMZ1' ||  subnet === 'DMZ2') &&
                       <div className="form-row">
                         <div className="form-group col-md-4">
                           <div className="form-check">
@@ -97,12 +102,12 @@ const EditEC2Form = ({demand_default,server_name_default,os_default,resource_def
                     
 
                       </div>
-                    }
+                    } 
                       
                       
                       
                       <div className="button-group">
-                        <button type="submit" id="save" className="btn btn-primary">更新</button>
+                        <button type="submit" id="save" className="btn btn-primary">更新資料庫</button>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancel()}>取消</button>
 
                       </div>
@@ -116,4 +121,4 @@ const EditEC2Form = ({demand_default,server_name_default,os_default,resource_def
   </>
 }
 
-export default EditEC2Form
+export default BackendEditEC2Form
