@@ -4,7 +4,7 @@ const moment = require('moment-timezone');
 
 
 
-const Terraform_data_Schemma = new mongoose.Schema({
+var Terraform_data_Schemma = new mongoose.Schema({
     
     demand: {
         type:String,
@@ -51,11 +51,26 @@ const Terraform_data_Schemma = new mongoose.Schema({
 
 
 })
-
-
 module.exports = mongoose.model('Terraform_data',Terraform_data_Schemma)
 
 
+/*
+Terraform_data_Schemma.pre('save', function() {
+    //this.updated_date = moment.tz(Date.now(), "Asia/Taipei").format()
+    this.updated_date = 'sdfs'
+    next()
+  });
+*/
+
+
+
+
+/*
+You cannot access the document being updated in pre('updateOne') or pre('findOneAndUpdate') query middleware. 
+If you need to access the document that will be updated,
+ you need to execute an explicit query for the document.
+
+*/
 
 
 
