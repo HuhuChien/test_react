@@ -1,8 +1,10 @@
 import React,{useEffect,useState,useRef,useReducer} from 'react'
 import axios from 'axios';
 import BackendEC2TableList from './BackendEC2TableList';
+import BackendEditEC2Form from './BackendEditEC2Form'
 import reducer from '../reducer.js';
 import ClipLoader from "react-spinners/ClipLoader";
+
 
 export const BackendEC2Context = React.createContext()
 
@@ -13,10 +15,64 @@ const BackendEC2 = ({query}) => {
   const [tem_demand,setTem_demand] = useState('')
   const [alert,setAlert] = useState(false)
   const [loading,setLoading] = useState(false)
+  
+ 
+
+  const [theId,setTheid] = useState('')
+  const [demand,setDemand] = useState('')
+  const [ec2Name,setEc2Name] = useState('')
+  const [os,setOS] = useState('ami-006e00d6ac75d2ebb')
+  const [resource,setResource] = useState('t1.micro')
+  const [subnet,setSubnet] = useState('A')
+  const [ip,setIp] = useState(false)
+
+
+
   const demand_request_default = useRef(null)
+  const demand_default = useRef(null)
+  const server_name_default = useRef(null)
+  const subnet_default = useRef(null)
+  const os_default = useRef(null)
+  const resource_default = useRef(null)
+  const check_default = useRef(null)
+  const search_default = useRef(null)
+  const spinner_default = useRef(null)
+
+  
+
+//將DMZ1、DMZ2帶IP轉換成普通subnet使用
+
+  useEffect(() => {
+    if(subnet !== 'DMZ1' && subnet !== 'DMZ2'){
+      setIp(false)
+    }
+   
+
+  },[subnet])
+  
+  useEffect(() => {
+
+    const data = JSON.parse(sessionStorage.getItem('all3'))
+    const demand = JSON.parse(sessionStorage.getItem('demand3'))
+    console.log(demand)
+    if(data){
+      setResponse(data)
+    } 
+
+    if(demand){
+      setDemand_apply(demand)
+      demand_request_default.current.value = demand
+     
+    }
+   
+  }, []);
 
 
-//const [state,dispatch] = useReducer(reducer,response)
+  useEffect(() => {
+   
+    window.sessionStorage.setItem('all3', JSON.stringify(response));
+    window.sessionStorage.setItem('demand3', JSON.stringify(demand_apply));
+  }, [response,demand_apply]);
 
 const fetchData = async() => {
   const url = "http://localhost:5020/demand"
@@ -24,11 +80,8 @@ const fetchData = async() => {
     const data = await axios.post(url,{
       demand:demand_apply
     })
-    console.log(data)
     setResponse(data.data)
 
-
-    console.log(response)
     if(data.data.length < 1 && demand_apply !== ''){
       setTem_demand(data.config.data)  
       setAlert(true)
@@ -54,6 +107,70 @@ const handle_Demand_Request = (e) => {
   fetchData()
 }
 
+
+
+
+
+const demand_ChangeHandler = (e) => {
+  setDemand(e.target.value)
+}
+
+
+const ec2_Name_ChangeHandler = (e) => {
+  setEc2Name(e.target.value)
+}
+
+const os_ChangeHandler = (e) => {
+  setOS(e.target.value)
+  console.log(e.target.value)
+}
+
+const instance_type_ChangeHandler = (e) => {
+  setResource(e.target.value)
+  console.log(e.target.value)
+}
+
+const subnet_ChangeHandler = (e) => {
+  setSubnet(e.target.value)
+
+}
+
+
+
+const ip_ChangeHandler = (e) => {
+  setIp(!ip)
+  console.log('be')
+}
+
+
+
+
+const cancel = (e) => {
+   //檢查欄位是否填完整
+   server_name_default.current.classList.remove('alarm')
+   demand_default.current.classList.remove('alarm') 
+   //要將表格欄位回復預設值
+   demand_default.current.value = demand
+   server_name_default.current.value = ''
+   os_default.current.value = 'ami-006e00d6ac75d2ebb'
+   resource_default.current.value = 't1.micro'
+   subnet_default.current.value = 'A'
+
+   //要將state回復預設值
+  
+   setEc2Name('')
+   setOS('ami-006e00d6ac75d2ebb')
+   setResource('t1.micro')
+   setSubnet('A')
+   setIp(false)
+   setTheid('')
+  
+}
+
+
+
+
+//刪除按鈕
 const deleteEC2 = async(_id) => {
   let isExecuted = window.confirm("確定刪除?");
   if (isExecuted) {
@@ -63,12 +180,13 @@ const deleteEC2 = async(_id) => {
 
 
    await new Promise((resolve, reject) => {
-        resolve(setLoading(true))
+        //resolve(setLoading(true))
+        setLoading(true)
         resolve(axios.delete(url));
 
         console.log('done1');
       })
-     
+
 
   await new Promise((resolve, reject) => {
       const newEC2s = response.filter((item) => 
@@ -77,7 +195,7 @@ const deleteEC2 = async(_id) => {
       setTimeout(() => {
           resolve(setResponse(newEC2s));
           resolve(setLoading(false))
-          console.log('done2');
+         
         },2000)
       
      
@@ -91,6 +209,106 @@ const deleteEC2 = async(_id) => {
 } 
 
 
+//修改按鈕
+const editEC2 = async(_id) => {
+  const edit_EC2 = response.find((item) => 
+  item._id === _id
+)
+
+  
+  await window.$('#form_modal_edit_backend').modal('show')
+  
+  demand_default.current.value = edit_EC2.demand
+  server_name_default.current.value = edit_EC2.server_name
+  os_default.current.value = edit_EC2.ami
+  resource_default.current.value = edit_EC2.instance_type
+  subnet_default.current.value = edit_EC2.subnet
+
+
+
+  setTheid(_id)
+  setDemand(edit_EC2.demand)
+  setEc2Name(edit_EC2.server_name)
+  setOS(edit_EC2.ami)
+  setResource(edit_EC2.instance_type)
+  setSubnet(edit_EC2.subnet)
+  setIp(edit_EC2.ip) 
+
+
+
+  if (subnet_default.current.value === 'DMZ1' || subnet_default.current.value === 'DMZ2'){
+    check_default.current.checked = edit_EC2.ip
+  
+   } 
+
+
+
+
+
+ }
+
+//更新資料庫按鈕
+const handle_Update_DB = async() => {
+  try{
+  
+    const url = `http://localhost:5020/update_ec2/${theId}`
+    const url2 = `http://localhost:5020/demand/${demand_apply}`
+    const updated_data = {
+      demand:demand,
+      server_name:ec2Name,
+      ami:os,
+      instance_type:resource,
+      subnet:subnet,
+      ip:ip,
+    }
+
+    //更新資料庫
+    await setLoading(true)
+   
+    await axios.put(url,updated_data)
+
+    //更新前端
+    await window.$('#form_modal_edit_backend').modal('hide')
+    const new_response = await axios.get(url2)
+
+
+    await new Promise((resolve, reject) => {
+        //要將state回復預設值
+        setTheid('')
+        setEc2Name('')
+        setOS('ami-006e00d6ac75d2ebb')
+        setResource('t1.micro')
+        setSubnet('A')
+        setIp(false)
+        console.log('done4')
+      setTimeout(() => {
+        setResponse(new_response.data)
+        resolve(setLoading(false));
+      },500)
+   
+
+    })
+
+
+
+
+
+    /*
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(window.alert('資料已完成修改，並更新資料庫'));
+      },800)
+ 
+   })
+   */
+
+
+
+  }catch(error){
+    console.log(error)
+  }
+  
+}
 
 
   return <>
@@ -105,9 +323,20 @@ const deleteEC2 = async(_id) => {
    
 <BackendEC2Context.Provider value={response} >
   
-     <BackendEC2TableList demand_apply={demand_apply} alert={alert} tem_demand={tem_demand} deleteEC2={deleteEC2}/>
-     {loading && <div className="clip_loader2"><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
      
+     
+      <BackendEC2TableList demand_apply={demand_apply} alert={alert} tem_demand={tem_demand} deleteEC2={deleteEC2} editEC2={editEC2}/>
+
+      {loading && <div className="clip_loader2"><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
+
+
+
+     <BackendEditEC2Form demand_default={demand_default} server_name_default={server_name_default} os_default={os_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
+      ip_ChangeHandler={ip_ChangeHandler} cancel={cancel} subnet={subnet} handle_Update_DB={handle_Update_DB}/> 
+    
+    
+
+    
 </BackendEC2Context.Provider>
 </div> 
   </>

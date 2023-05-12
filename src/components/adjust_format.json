@@ -1,8 +1,7 @@
 [
       {
-        
-        "ami-007855ac798b5175e": "Ubuntu 22.04 LTS",
         "ami-006e00d6ac75d2ebb": "Ubuntu 20.04 LTS",
+        "ami-007855ac798b5175e": "Ubuntu 22.04 LTS",
         "ami-00c39f71452c08778": "Amazon Linux 2023"
       },
       {

@@ -6,12 +6,12 @@ import {VscChevronLeft,VscChevronRight} from "react-icons/vsc";
 import {AiOutlineFileSearch} from 'react-icons/ai'
 import BackendEC2TableSingle from './BackendEC2TableSingle';
 
-const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2}) => {
+const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) => {
 
 
   const receiveData = useContext(BackendEC2Context)
   let demand_obj
-  console.log(receiveData)
+  //console.log(receiveData)
 
 
 
@@ -48,11 +48,9 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2}) => {
 
                         {receiveData.map((ec2,index) => {
                               
-                              return <BackendEC2TableSingle key={ec2._id} {...ec2} deleteEC2={deleteEC2}/>
-                            
-                            
+                              return <BackendEC2TableSingle key={ec2._id} {...ec2} deleteEC2={deleteEC2} editEC2={editEC2}/>
+                                              
                         })
-
 
                         }
 

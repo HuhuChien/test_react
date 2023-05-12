@@ -6,9 +6,9 @@ import { AiFillCheckSquare  } from "react-icons/ai";
 import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
 
-const ApplyEC2TableSingle = ({_id,demand,server_name
+const BackendEC2TableSingle = ({_id,demand,server_name
   ,ami,instance_type,APPLY_DATE,subnet
-  ,ip,deleteEC2}) => {
+  ,ip,deleteEC2,editEC2}) => {
    
 
 
@@ -41,8 +41,8 @@ const ApplyEC2TableSingle = ({_id,demand,server_name
                     <FiMoreVertical />
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a className="dropdown-item" href="#/" >修改</a> 
-                      <a className="dropdown-item" href="#/" onClick={() => deleteEC2(_id)}>刪除</a>
+                      <a className="dropdown-item" onClick={() => editEC2(_id)}>修改</a> 
+                      <a className="dropdown-item" onClick={() => deleteEC2(_id)}>刪除</a>
                     </div>
               </td>
   
@@ -58,4 +58,4 @@ const ApplyEC2TableSingle = ({_id,demand,server_name
   </>
 }
 
-export default ApplyEC2TableSingle
+export default BackendEC2TableSingle

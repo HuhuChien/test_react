@@ -16,8 +16,10 @@ export const EC2Context = React.createContext()
 
 
 const CreateEC2 = ({setQuery}) => {
-
-  const [theId,setTheid] = useState('')
+  const [query2,setQuery2] = useState('')
+  const [query3,setQuery3] = useState([])
+  const [triggerNext, setTriggerNext] = useState(0);
+  const [triggerPrevious, setTriggerPrevious] = useState(0);
   const [demand,setDemand] = useState('')
   const [ec2Name,setEc2Name] = useState('')
   const [os,setOS] = useState('ami-006e00d6ac75d2ebb')
@@ -26,14 +28,8 @@ const CreateEC2 = ({setQuery}) => {
   const [ip,setIp] = useState(false)
   const [edit,setEdit] = useState(false)
   const [loading,setLoading] = useState(false)
-  const [query2,setQuery2] = useState('')
-  const [query3,setQuery3] = useState([])
-  const [triggerNext, setTriggerNext] = useState(0);
-  const [triggerPrevious, setTriggerPrevious] = useState(0);
 
-
-
-
+  const [theId,setTheid] = useState('')
   const demand_default = useRef(null)
   const server_name_default = useRef(null)
   const subnet_default = useRef(null)
@@ -47,31 +43,29 @@ const CreateEC2 = ({setQuery}) => {
 
   let defaultState = {
     allEC2: [],
-    //subnet:subnet, //應該用不到了
+    subnet:subnet,
     }
 
 
   const [state,dispatch] = useReducer(reducer,defaultState)
- 
-  useEffect(() => {
-    //window.localStorage.removeItem('all')
-    //window.localStorage.clear();重新整理和關閉session  效果會衝突
-    const data = JSON.parse(sessionStorage.getItem('all'))
 
-    //setUsername(prompt("What's your AD username?"))
-    //setPassword(prompt("What's your AD password?"))
-    if(data){
-      state.allEC2 = data.allEC2
+  useEffect(() => {
+    //window.localStorage.clear();
+    const data = JSON.parse(localStorage.getItem('all'))
+    
+    if(!data){
+
+      return 
     } else {
-      return
+    
+      state.allEC2 = data.allEC2
     }
-   
    
   }, []);
 
   useEffect(() => {
    
-    window.sessionStorage.setItem('all', JSON.stringify(state));
+    window.localStorage.setItem('all', JSON.stringify(state));
     setDemand(demand_default.current.value)
     setEc2Name(server_name_default.current.value)
   }, [state,state.allEC2,demand,ec2Name,os,resource,subnet,ip]);
@@ -112,13 +106,12 @@ const CreateEC2 = ({setQuery}) => {
   const subnet_ChangeHandler = (e) => {
    
     setSubnet(e.target.value)
-    //setIp(false)
-    // if(check_default.current){
-    //   check_default.current.checked = false
-    // }
+    setIp(false)
+    if(check_default.current){
+      check_default.current.checked = false
+    }
 
-    //dispatch({type:"SUBNET_UPDATE",payload:e.target.value}) //選DMZ時，會出現IP選項是否打勾
-   
+    dispatch({type:"SUBNET_UPDATE",payload:e.target.value})
 }
 
 
@@ -130,25 +123,17 @@ const CreateEC2 = ({setQuery}) => {
 
 //取消按鈕
   const cancel = (e) => {
-    //檢查欄位是否填完整
+
     server_name_default.current.classList.remove('alarm')
     demand_default.current.classList.remove('alarm') 
-    //要將表格欄位回復預設值
     demand_default.current.value = demand
     server_name_default.current.value = ''
     os_default.current.value = 'ami-006e00d6ac75d2ebb'
     resource_default.current.value = 't1.micro'
     subnet_default.current.value = 'A'
-
-    //要將state回復預設值
     setEdit(false)
-    setEc2Name('')
-    setOS('ami-006e00d6ac75d2ebb')
-    setResource('t1.micro')
-    setSubnet('A')
     setIp(false)
-
-
+    //dispatch({type:"DEFAULT_SUBNET"})
 }
 
 //刪除按鈕
@@ -180,7 +165,7 @@ const CreateEC2 = ({setQuery}) => {
     console.log(edit_EC2)
 
     await setEdit(true)
-    //await setIp(edit_EC2.IP) 有正確改成要的IP狀態，但樓下註解還是false
+    await setIp(edit_EC2.IP)
     await window.$('#form_modal_edit').modal('show')
   
  
@@ -196,20 +181,31 @@ const CreateEC2 = ({setQuery}) => {
     setOS(edit_EC2.OS)
     setResource(edit_EC2.RESOURCE)
     setSubnet(edit_EC2.SUBNET)
-    setIp(edit_EC2.IP) 
-    if(subnet_default.current.value === 'DMZ1' || subnet_default.current.value === 'DMZ2'){
-      console.log(edit_EC2.IP)
-   
-     check_default.current.checked = edit_EC2.IP//不能使用ip，還是會是false。應該是執行順序的問題
+
+
  
-    } 
+
+    await new Promise((resolve,reject) => {
+     //可以再研究看看
+      
+      if(subnet_default.current.value === 'DMZ1' || subnet_default.current.value === 'DMZ2'){
+        console.log(edit_EC2.IP)
+        
+        console.log(ip)
+       check_default.current.checked = edit_EC2.IP
+       resolve()
+      } 
+
+    })
+    
+
+  
  
   } 
 
 //更新按鈕
   const handle_Update = async(e) => {
     e.preventDefault()
-    //檢查欄位是否填完整
     if(server_name_default.current.value === '' && demand_default.current.value === ''){
       server_name_default.current.classList.add('alarm')
       demand_default.current.classList.add('alarm') 
@@ -233,17 +229,8 @@ const CreateEC2 = ({setQuery}) => {
     if(query3.length > 0){
       window.location.reload(true)
     }
-
-   
-      //要將state回復預設值
-      setEdit(false)
-      setEc2Name('')
-      setOS('ami-006e00d6ac75d2ebb')
-      setResource('t1.micro')
-      setSubnet('A')
-      setIp(false)
-
-
+    
+    //dispatch({type:"DEFAULT_SUBNET"})
   }
 
 
@@ -288,7 +275,7 @@ const CreateEC2 = ({setQuery}) => {
       }
 
       
-      //送出到前端table list後，form回復預設值
+      //送出到前端表格後回復預設值
      
       server_name_default.current.value = ''
       os_default.current.value = 'ami-006e00d6ac75d2ebb'
@@ -300,9 +287,12 @@ const CreateEC2 = ({setQuery}) => {
       setResource('t1.micro')
       setSubnet('A')
       setIp(false)
+      dispatch({type:"DEFAULT_SUBNET"})
+
       window.$('#form_modal').modal('hide')
-
-
+     
+  
+   
       if(query2.npage >= 1){
       
         setTriggerNext((triggerNext) => triggerNext + 1);
@@ -338,7 +328,7 @@ const CreateEC2 = ({setQuery}) => {
   await new Promise((resolve, reject) => {
   
     resolve(setLoading(true));
-
+        console.log('done1')
     });
 
 
@@ -400,7 +390,7 @@ const CreateEC2 = ({setQuery}) => {
             resource_default={resource_default} subnet_default={subnet_default} check_default={check_default}
             demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
             subnet_ChangeHandler={subnet_ChangeHandler} ip_ChangeHandler={ip_ChangeHandler} 
-            cancel={cancel} handle_Submit={handle_Submit} subnet={subnet}/>}
+            cancel={cancel} handle_Submit={handle_Submit}/>}
             
             <Search deleteEC2={deleteEC2} editEC2={editEC2} setQuery3={setQuery3} triggerNext={triggerNext} triggerPrevious={triggerPrevious} search_default={search_default}/>
             
