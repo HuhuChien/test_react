@@ -26,7 +26,7 @@ const NavbarHead = ({query}) => {
     <li className="nav-item nav-link">
 
           <i className="fa fa-envelope-o nav-link">
-              <NavLink to="/">
+              <NavLink to="/create_ec2">
                   <div>新建雲端主機</div> 
               </NavLink>
           </i>

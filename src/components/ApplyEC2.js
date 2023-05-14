@@ -14,13 +14,30 @@ const ApplyEC2 = ({query}) => {
   const [alert,setAlert] = useState(false)
   const demand_request_default = useRef(null)
 
-// useEffect(() => {
-//   console.log(query)
-// },[query])
+  useEffect(() => {
 
-useEffect(() => {
-  
-})
+    const data = JSON.parse(sessionStorage.getItem('all2'))
+    const demand = JSON.parse(sessionStorage.getItem('demand2'))
+    
+    if(data){
+      setResponse(data)
+    } 
+    if(demand){
+      setDemand_apply(demand)
+      demand_request_default.current.value = demand
+    }
+    
+
+    
+   
+  }, []);
+
+
+  useEffect(() => {
+   
+    window.sessionStorage.setItem('all2', JSON.stringify(response));
+    window.sessionStorage.setItem('demand2', JSON.stringify(demand_apply));
+  }, [response,demand_apply]);
 
 const fetchData = async() => {
   const url = "http://localhost:5020/demand"
@@ -31,10 +48,10 @@ const fetchData = async() => {
     console.log(data)
     setResponse(data.data)
     console.log(response)
-    if(data.data.length < 1){
+    if(data.data.length < 1 && demand_apply !== ''){
       setTem_demand(data.config.data)  
       setAlert(true)
-    
+      window.$('#apply_demand_ModalCenter').modal('show')
     } else {
       setAlert(false)
     }
@@ -54,6 +71,7 @@ const demand_apply_ChangeHandler = (e) => {
 const handle_Demand_Request = (e) => {
   e.preventDefault()
   fetchData()
+
 }
 
   return <>

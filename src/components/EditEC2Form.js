@@ -3,7 +3,7 @@ import { EC2Context } from './CreateEC2'
 
 
 
-const EditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler}) => {
+const EditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,ip,subnet}) => {
     const receiveData = useContext(EC2Context)
     console.log(receiveData)
  
@@ -83,7 +83,7 @@ const EditEC2Form = ({demand_default,server_name_default,os_default,resource_def
                       </div>
                      
                 
-                      {(receiveData.subnet === 'DMZ1' ||  receiveData.subnet === 'DMZ2') &&
+                      {(subnet === 'DMZ1' ||  subnet === 'DMZ2') &&
                       <div className="form-row">
                         <div className="form-group col-md-4">
                           <div className="form-check">

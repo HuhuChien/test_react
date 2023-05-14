@@ -11,7 +11,7 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) 
 
   const receiveData = useContext(BackendEC2Context)
   let demand_obj
-  console.log(receiveData)
+  //console.log(receiveData)
 
 
 
@@ -49,10 +49,8 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) 
                         {receiveData.map((ec2,index) => {
                               
                               return <BackendEC2TableSingle key={ec2._id} {...ec2} deleteEC2={deleteEC2} editEC2={editEC2}/>
-                            
-                            
+                                              
                         })
-
 
                         }
 
@@ -61,9 +59,25 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) 
             }
 
             {  alert &&
-              <div className="alert alert-danger" role="alert">
-              <span>無需求單號{demand_obj.demand}</span>
-            </div>
+                 <div className="modal fade" id="backend_ModalCenter" tabIndex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                 <div className="modal-dialog modal-dialog-centered" role="document">
+                   <div className="modal-content">
+                     <div className="modal-header">
+                       <h5 className="modal-title" id="backend_title">提示</h5>
+                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                       </button>
+                     </div>
+                     <div className="modal-body">
+                       無需求單號{demand_obj.demand}
+                     </div>
+                     <div className="modal-footer">
+                       <button type="button" className="btn btn-secondary" data-dismiss="modal">關閉</button>
+                 
+                     </div>
+                   </div>
+                 </div>
+               </div>
 
             }
    

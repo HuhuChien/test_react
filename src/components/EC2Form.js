@@ -6,7 +6,7 @@ import { EC2Context } from './CreateEC2'
 
 const EC2Form = ({demand,demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,
   demand_ChangeHandler,ec2_Name_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Submit,
-  cancel,ip_ChangeHandler,subnet_ChangeHandler}) => {
+  cancel,ip_ChangeHandler,subnet_ChangeHandler,subnet}) => {
 
 const receiveData = useContext(EC2Context)
  
@@ -57,10 +57,9 @@ const receiveData = useContext(EC2Context)
                       <div className="form-row">
                         <div className="form-group col-md-4">
                           <label htmlFor="ami">雲端主機作業系統</label>
-                          <select name="ami" id="instance_type" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
+                          <select name="ami" id="ami" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
                             <option value="ami-006e00d6ac75d2ebb">Ubuntu 20.04 LTS</option>
                             <option value="ami-007855ac798b5175e">Ubuntu 22.04 LTS</option>
-                            
                             <option value="ami-00c39f71452c08778">Amazon Linux 2023 </option>
                           </select>
                         </div>
@@ -96,8 +95,8 @@ const receiveData = useContext(EC2Context)
           
                       </div>
                      
-                
-                      {(receiveData.subnet === 'DMZ1' ||  receiveData.subnet === 'DMZ2') &&
+                      
+                      {(subnet === 'DMZ1' || subnet === 'DMZ2') &&
                       <div className="form-row">
                         <div className="form-group col-md-4">
                           <div className="form-check">
@@ -113,7 +112,7 @@ const receiveData = useContext(EC2Context)
                       </div>
                     }
                       
-                      
+                   
                       
                       <div className="button-group">
                         <button type="submit" id="save" className="btn btn-primary">儲存</button>

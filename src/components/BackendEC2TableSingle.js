@@ -41,8 +41,8 @@ const BackendEC2TableSingle = ({_id,demand,server_name
                     <FiMoreVertical />
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a className="dropdown-item" href="#/" onClick={() => editEC2(_id)}>修改</a> 
-                      <a className="dropdown-item" href="#/" onClick={() => deleteEC2(_id)}>刪除</a>
+                      <a className="dropdown-item" onClick={() => editEC2(_id)}>修改</a> 
+                      <a className="dropdown-item" onClick={() => deleteEC2(_id)}>刪除</a>
                     </div>
               </td>
   

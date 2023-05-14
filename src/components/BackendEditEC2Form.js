@@ -4,27 +4,27 @@ import { BackendEC2Context } from './BackendEC2'
 
 
 
-const BackendEditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,subnet}) => {
+const BackendEditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,handle_Update_DB,subnet}) => {
    
 
 
    
   const receiveData = useContext(BackendEC2Context)
-  console.log(receiveData)
+  //console.log(receiveData)
 
 
 
  return <>
    
 
-        <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit_backend" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
         <div className="modal-dialog modal-xl">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
-              <form className="form" method="POST" id="the_form" onSubmit={handle_Update}>
+              <form className="form" id="the_form">
     
 
                      <div className="form-row">
@@ -102,12 +102,13 @@ const BackendEditEC2Form = ({demand_default,server_name_default,os_default,resou
                     
 
                       </div>
+                
                     } 
-                      
+                  
                       
                       
                       <div className="button-group">
-                        <button type="submit" id="save" className="btn btn-primary">更新資料庫</button>
+                        <button type="button" id="save" className="btn btn-primary" onClick={() => handle_Update_DB()}>更新資料庫</button>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancel()}>取消</button>
 
                       </div>

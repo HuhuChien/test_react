@@ -57,12 +57,31 @@ const ApplyEC2TableList = ({demand_apply,alert,tem_demand}) => {
             }
 
             { alert &&
-              <div className="alert alert-danger" role="alert">
-              <span>無需求單號{demand_obj.demand}</span>
-            </div>
+           <div className="modal fade" id="apply_demand_ModalCenter" tabIndex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+           <div className="modal-dialog modal-dialog-centered" role="document">
+             <div className="modal-content">
+               <div className="modal-header">
+                 <h5 className="modal-title" id="apply_demand_title">提示</h5>
+                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>
+               <div className="modal-body">
+                 無需求單號{demand_obj.demand}
+               </div>
+               <div className="modal-footer">
+                 <button type="button" className="btn btn-secondary" data-dismiss="modal">關閉</button>
+           
+               </div>
+             </div>
+           </div>
+         </div>
 
             }
    
+ 
+
+
 
 
   
