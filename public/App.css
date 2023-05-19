@@ -3,8 +3,8 @@
 
 .the_navbar{
     margin-top: 1.5rem;
-    max-width: 100rem;
-    /* position: relative; */
+    width:100%;
+
 } 
 
 
@@ -58,10 +58,31 @@
     transform: translateX(-50%);
 }
 
+.the_modal-content{
+   height: auto;
+
+}
 
 #the_form {
     margin:2.5rem;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content:space-between
+ 
 }
+ .form-row{
+    min-width: 230px;
+} 
+
+.button-group{
+    margin: auto;
+}
+
+/* .the_form-group{
+    width: 500px;
+
+} */
+
 
 
 
@@ -196,21 +217,32 @@ table td {
     outline: none;
 } 
 
+#demand_save_backend{
+    height: 54px;
+    width: 94px;
+    background-color: black;
+    color: #ffffff;
+    border-style: none;
+    cursor: pointer;
+    outline: none;
+} 
 
-
-
-
-
-.alert-danger{
-    width:250px;
-    margin:auto;
+.bar_ad_settings{
     position: absolute;
-    right:150px;
-    top:20px; 
- 
+    display:flex;
+    align-items: flex-end;
+    right:50px;
+    top:0;
 }
 
 
+.dropdown-item-logout {
+    width: 50px;
+    font-size:14px;
+    text-align: center;
+    padding: 0;
+
+  }
 
 
 @media screen and (min-width:766px) and (max-width:995px){ 
@@ -227,14 +259,7 @@ table td {
   
 
 
-    .alert-danger{
-        width:150px;
-        position: absolute;
-        right:0;
-        top:20px; 
-  
-     
-    }
+   
   }
 
   @media screen and (max-width:766px){ 
@@ -247,15 +272,7 @@ table td {
     }
 
 
-    .alert-danger{
-        max-width:80px;
-        position: absolute;
-        right:0;
-        top:20px; 
-  
-     
-    }
-   
+
 
 
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {NavLink} from 'react-router-dom'
 import {encryptStorage1} from '../App'
 const NavbarHead = () => {
@@ -47,7 +47,6 @@ const NavbarHead = () => {
                 <div>修改申請內容</div>     
             </NavLink>
         </i>
-    
     </li>
 
 

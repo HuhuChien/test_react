@@ -5,7 +5,7 @@ import data from './adjust_format.json'
 import { AiFillCheckSquare  } from "react-icons/ai";
 import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
-
+import {encryptStorage1} from '../App'
 const BackendEC2TableSingle = ({_id,demand,server_name
   ,ami,instance_type,APPLY_DATE,subnet
   ,ip,deleteEC2,editEC2}) => {
@@ -25,7 +25,8 @@ const BackendEC2TableSingle = ({_id,demand,server_name
              <td>
                   {demand}
              </td>
-             
+             <td>{encryptStorage1.getItem('query5').cn}</td>
+             <td>{encryptStorage1.getItem('query5').dn.split(",")[1].split('_')[1]}</td>
               <td>{server_name}</td>
               <td>{new_OS}</td>
               <td>{new_RESOURCE}</td>

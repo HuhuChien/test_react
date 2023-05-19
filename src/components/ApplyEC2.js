@@ -1,9 +1,9 @@
 import React,{useEffect,useState,useRef} from 'react'
 import axios from 'axios';
 import ApplyEC2TableList from './ApplyEC2TableList';
-
-
-
+import Logout from './Logout';
+import  secureLocalStorage  from  "react-secure-storage";
+import {encryptStorage1} from '../App'
 export const ApplyEC2Context = React.createContext()
 
 
@@ -15,9 +15,10 @@ const ApplyEC2 = ({query}) => {
   const demand_request_default = useRef(null)
 
   useEffect(() => {
-
-    const data = JSON.parse(sessionStorage.getItem('all2'))
-    const demand = JSON.parse(sessionStorage.getItem('demand2'))
+    secureLocalStorage.removeItem('all2')
+    secureLocalStorage.removeItem('demand2')
+    const data = JSON.parse(secureLocalStorage.getItem('all2'))
+    const demand = JSON.parse(secureLocalStorage.getItem('demand2'))
     
     if(data){
       setResponse(data)
@@ -35,8 +36,8 @@ const ApplyEC2 = ({query}) => {
 
   useEffect(() => {
    
-    window.sessionStorage.setItem('all2', JSON.stringify(response));
-    window.sessionStorage.setItem('demand2', JSON.stringify(demand_apply));
+    secureLocalStorage.setItem('all2', JSON.stringify(response));
+    secureLocalStorage.setItem('demand2', JSON.stringify(demand_apply));
   }, [response,demand_apply]);
 
 const fetchData = async() => {
@@ -51,7 +52,7 @@ const fetchData = async() => {
     if(data.data.length < 1 && demand_apply !== ''){
       setTem_demand(data.config.data)  
       setAlert(true)
-    
+      window.$('#apply_demand_ModalCenter').modal('show')
     } else {
       setAlert(false)
     }
@@ -71,9 +72,17 @@ const demand_apply_ChangeHandler = (e) => {
 const handle_Demand_Request = (e) => {
   e.preventDefault()
   fetchData()
+
 }
 
   return <>
+  <div className='bar_ad_settings'>
+      <div className="username">{
+      encryptStorage1.getItem('query5').sAMAccountName + ' ' +
+      encryptStorage1.getItem('query5').displayName
+      }</div> 
+      <Logout />
+  </div>
   <div className="apply_container">
     <form className="form" method="POST" id="the_form_demand" onSubmit={handle_Demand_Request}>
     

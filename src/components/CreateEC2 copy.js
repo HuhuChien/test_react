@@ -9,17 +9,18 @@ import EmptyTableList from './EmptyTableList';
 import EditEC2Form from './EditEC2Form'
 import SearchEC2TableList from './SearchEC2TableList';
 import Search from './Search';
+import Logout from './Logout';
 //import $ from 'jquery'; 
 import ClipLoader from "react-spinners/ClipLoader";
-
+import { EncryptStorage } from 'encrypt-storage';
+import encryptStorage2 from '../App'
 export const EC2Context = React.createContext()
 
 
-const CreateEC2 = ({setQuery}) => {
-  const [query2,setQuery2] = useState('')
-  const [query3,setQuery3] = useState([])
-  const [triggerNext, setTriggerNext] = useState(0);
-  const [triggerPrevious, setTriggerPrevious] = useState(0);
+const CreateEC2 = ({setQuery,query4}) => {
+  //const ref = useRef()
+  console.log(query4)
+  const [theId,setTheid] = useState('')
   const [demand,setDemand] = useState('')
   const [ec2Name,setEc2Name] = useState('')
   const [os,setOS] = useState('ami-006e00d6ac75d2ebb')
@@ -28,8 +29,13 @@ const CreateEC2 = ({setQuery}) => {
   const [ip,setIp] = useState(false)
   const [edit,setEdit] = useState(false)
   const [loading,setLoading] = useState(false)
+  const [query2,setQuery2] = useState('')
+  const [query3,setQuery3] = useState([])
+  const [triggerNext, setTriggerNext] = useState(0);
+  const [triggerPrevious, setTriggerPrevious] = useState(0);
+  const [loggin_user,set_Loggin_user] = useState('')
+  const [disabled,setDisabled] = useState(false) 
 
-  const [theId,setTheid] = useState('')
   const demand_default = useRef(null)
   const server_name_default = useRef(null)
   const subnet_default = useRef(null)
@@ -39,33 +45,44 @@ const CreateEC2 = ({setQuery}) => {
   const search_default = useRef(null)
   const spinner_default = useRef(null)
 
-
+  
 
   let defaultState = {
     allEC2: [],
-    subnet:subnet,
+
     }
 
 
   const [state,dispatch] = useReducer(reducer,defaultState)
-
+ 
+  //前端主機清單及頁面右上角的AD資訊
   useEffect(() => {
-    //window.localStorage.clear();
-    const data = JSON.parse(localStorage.getItem('all'))
-    
-    if(!data){
+    //windlow.localStorage.removeItem('all')
+    //window.localStorage.clear();//重新整理和關閉session  效果會衝突
+   
 
-      return 
-    } else {
-    
+    const data = JSON.parse(sessionStorage.getItem('all'))
+    const data2 = JSON.parse(sessionStorage.getItem('query4'))
+  
+
+    console.log(data2)
+    if(data){
       state.allEC2 = data.allEC2
+    } else {
+      return
     }
+
+    if(data2){
+      set_Loggin_user(data2)
+    }
+
    
   }, []);
 
   useEffect(() => {
+
+    sessionStorage.setItem('all', JSON.stringify(state));
    
-    window.localStorage.setItem('all', JSON.stringify(state));
     setDemand(demand_default.current.value)
     setEc2Name(server_name_default.current.value)
   }, [state,state.allEC2,demand,ec2Name,os,resource,subnet,ip]);
@@ -77,7 +94,9 @@ const CreateEC2 = ({setQuery}) => {
     setQuery(state)
   },[state.allEC2,setQuery,state])
  
- 
+
+  
+
 
 
   const demand_ChangeHandler = (e) => {
@@ -106,12 +125,13 @@ const CreateEC2 = ({setQuery}) => {
   const subnet_ChangeHandler = (e) => {
    
     setSubnet(e.target.value)
-    setIp(false)
-    if(check_default.current){
-      check_default.current.checked = false
-    }
+    //setIp(false)
+    // if(check_default.current){
+    //   check_default.current.checked = false
+    // }
 
-    dispatch({type:"SUBNET_UPDATE",payload:e.target.value})
+    //dispatch({type:"SUBNET_UPDATE",payload:e.target.value}) //選DMZ時，會出現IP選項是否打勾
+   
 }
 
 
@@ -123,17 +143,25 @@ const CreateEC2 = ({setQuery}) => {
 
 //取消按鈕
   const cancel = (e) => {
-
+    //檢查欄位是否填完整
     server_name_default.current.classList.remove('alarm')
     demand_default.current.classList.remove('alarm') 
+    //要將表格欄位回復預設值
     demand_default.current.value = demand
     server_name_default.current.value = ''
     os_default.current.value = 'ami-006e00d6ac75d2ebb'
     resource_default.current.value = 't1.micro'
     subnet_default.current.value = 'A'
+
+    //要將state回復預設值
     setEdit(false)
+    setEc2Name('')
+    setOS('ami-006e00d6ac75d2ebb')
+    setResource('t1.micro')
+    setSubnet('A')
     setIp(false)
-    //dispatch({type:"DEFAULT_SUBNET"})
+
+
 }
 
 //刪除按鈕
@@ -165,7 +193,7 @@ const CreateEC2 = ({setQuery}) => {
     console.log(edit_EC2)
 
     await setEdit(true)
-    await setIp(edit_EC2.IP)
+    //await setIp(edit_EC2.IP) 有正確改成要的IP狀態，但樓下註解還是false
     await window.$('#form_modal_edit').modal('show')
   
  
@@ -181,31 +209,20 @@ const CreateEC2 = ({setQuery}) => {
     setOS(edit_EC2.OS)
     setResource(edit_EC2.RESOURCE)
     setSubnet(edit_EC2.SUBNET)
-
-
+    setIp(edit_EC2.IP) 
+    if(subnet_default.current.value === 'DMZ1' || subnet_default.current.value === 'DMZ2'){
+      console.log(edit_EC2.IP)
+   
+     check_default.current.checked = edit_EC2.IP//不能使用ip，還是會是false。應該是執行順序的問題
  
-
-    await new Promise((resolve,reject) => {
-     //可以再研究看看
-      
-      if(subnet_default.current.value === 'DMZ1' || subnet_default.current.value === 'DMZ2'){
-        console.log(edit_EC2.IP)
-        
-        console.log(ip)
-       check_default.current.checked = edit_EC2.IP
-       resolve()
-      } 
-
-    })
-    
-
-  
+    } 
  
   } 
 
 //更新按鈕
   const handle_Update = async(e) => {
     e.preventDefault()
+    //檢查欄位是否填完整
     if(server_name_default.current.value === '' && demand_default.current.value === ''){
       server_name_default.current.classList.add('alarm')
       demand_default.current.classList.add('alarm') 
@@ -229,8 +246,17 @@ const CreateEC2 = ({setQuery}) => {
     if(query3.length > 0){
       window.location.reload(true)
     }
-    
-    //dispatch({type:"DEFAULT_SUBNET"})
+
+   
+      //要將state回復預設值
+      setEdit(false)
+      setEc2Name('')
+      setOS('ami-006e00d6ac75d2ebb')
+      setResource('t1.micro')
+      setSubnet('A')
+      setIp(false)
+
+
   }
 
 
@@ -275,7 +301,7 @@ const CreateEC2 = ({setQuery}) => {
       }
 
       
-      //送出到前端表格後回復預設值
+      //送出到前端table list後，form回復預設值
      
       server_name_default.current.value = ''
       os_default.current.value = 'ami-006e00d6ac75d2ebb'
@@ -287,12 +313,9 @@ const CreateEC2 = ({setQuery}) => {
       setResource('t1.micro')
       setSubnet('A')
       setIp(false)
-      dispatch({type:"DEFAULT_SUBNET"})
-
       window.$('#form_modal').modal('hide')
-     
-  
-   
+
+
       if(query2.npage >= 1){
       
         setTriggerNext((triggerNext) => triggerNext + 1);
@@ -308,11 +331,11 @@ const CreateEC2 = ({setQuery}) => {
   //送出按鈕
   const handle_Submit_DB =async(e) => {
     try{
+      axios.defaults.withCredentials = true //一定要有這行，解決reload後，無法送出問題
+      await setDisabled(true)
        for (const[i,value] of state.allEC2.entries()){
         let payload = state.allEC2
-        console.log(payload)
         const url = 'http://localhost:5020/task'
-        console.log('loop')
       await axios.post(url,{
           demand:payload[i].DEMAND,
           server_name:payload[i].EC2NAME,
@@ -328,7 +351,7 @@ const CreateEC2 = ({setQuery}) => {
   await new Promise((resolve, reject) => {
   
     resolve(setLoading(true));
-        console.log('done1')
+
     });
 
 
@@ -359,6 +382,11 @@ const CreateEC2 = ({setQuery}) => {
       setDemand('')
   })
 
+  await new Promise((resolve, reject) => {
+    setDisabled(false)
+})
+
+  
     
     }catch(error){
       console.log(error.name)
@@ -368,15 +396,23 @@ const CreateEC2 = ({setQuery}) => {
   
   }
 
+  
 
   
 
   return <>
-    <EC2Context.Provider value={state}>
+    <EC2Context.Provider value={state} >
+        <div className='bar_ad_settings'>
+            <div className="username">{
+            JSON.parse(sessionStorage.getItem('query5')).sAMAccountName + ' ' +
+            JSON.parse(sessionStorage.getItem('query5')).displayName
+            }</div> 
+            <Logout />
+        </div>
     
           <button type="button" className="main" data-toggle="modal" data-target=".form_modal" id="click-modal">開始建立主機</button>
           {state.allEC2.length > 0 && 
-          <button type="button" className="main" onClick={handle_Submit_DB}>送出</button>
+          <button type="button" onClick={handle_Submit_DB} disabled={disabled} className="main">送出</button>
           }
           
           
@@ -390,7 +426,7 @@ const CreateEC2 = ({setQuery}) => {
             resource_default={resource_default} subnet_default={subnet_default} check_default={check_default}
             demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
             subnet_ChangeHandler={subnet_ChangeHandler} ip_ChangeHandler={ip_ChangeHandler} 
-            cancel={cancel} handle_Submit={handle_Submit}/>}
+            cancel={cancel} handle_Submit={handle_Submit} subnet={subnet}/>}
             
             <Search deleteEC2={deleteEC2} editEC2={editEC2} setQuery3={setQuery3} triggerNext={triggerNext} triggerPrevious={triggerPrevious} search_default={search_default}/>
             

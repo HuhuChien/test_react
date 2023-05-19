@@ -2,10 +2,10 @@ import React,{useEffect,useState,useRef,useReducer} from 'react'
 import axios from 'axios';
 import BackendEC2TableList from './BackendEC2TableList';
 import BackendEditEC2Form from './BackendEditEC2Form'
-import reducer from '../reducer.js';
 import ClipLoader from "react-spinners/ClipLoader";
-
-
+import secureLocalStorage  from  "react-secure-storage";
+import Logout from './Logout';
+import {encryptStorage1} from '../App'
 export const BackendEC2Context = React.createContext()
 
 
@@ -51,9 +51,10 @@ const BackendEC2 = ({query}) => {
   },[subnet])
   
   useEffect(() => {
-
-    const data = JSON.parse(sessionStorage.getItem('all3'))
-    const demand = JSON.parse(sessionStorage.getItem('demand3'))
+    secureLocalStorage.removeItem('all3')
+    secureLocalStorage.removeItem('demand3')
+    const data = JSON.parse(secureLocalStorage.getItem('all3'))
+    const demand = JSON.parse(secureLocalStorage.getItem('demand3'))
     console.log(demand)
     if(data){
       setResponse(data)
@@ -70,8 +71,9 @@ const BackendEC2 = ({query}) => {
 
   useEffect(() => {
    
-    window.sessionStorage.setItem('all3', JSON.stringify(response));
-    window.sessionStorage.setItem('demand3', JSON.stringify(demand_apply));
+    secureLocalStorage.setItem('all3', JSON.stringify(response));
+    secureLocalStorage.setItem('demand3', JSON.stringify(demand_apply));
+   
   }, [response,demand_apply]);
 
 const fetchData = async() => {
@@ -85,7 +87,7 @@ const fetchData = async() => {
     if(data.data.length < 1 && demand_apply !== ''){
       setTem_demand(data.config.data)  
       setAlert(true)
-    
+      window.$('#backend_ModalCenter').modal('show')
     } else {
       setAlert(false)
     }
@@ -139,7 +141,7 @@ const subnet_ChangeHandler = (e) => {
 
 const ip_ChangeHandler = (e) => {
   setIp(!ip)
-  console.log('be')
+
 }
 
 
@@ -172,6 +174,7 @@ const cancel = (e) => {
 
 //刪除按鈕
 const deleteEC2 = async(_id) => {
+  axios.defaults.withCredentials = true //一定要有這行，解決reload後，無法刪除問題
   let isExecuted = window.confirm("確定刪除?");
   if (isExecuted) {
     const url = `http://localhost:5020/delete_ec2/${_id}`
@@ -211,6 +214,7 @@ const deleteEC2 = async(_id) => {
 
 //修改按鈕
 const editEC2 = async(_id) => {
+ 
   const edit_EC2 = response.find((item) => 
   item._id === _id
 )
@@ -250,7 +254,7 @@ const editEC2 = async(_id) => {
 //更新資料庫按鈕
 const handle_Update_DB = async() => {
   try{
-  
+    axios.defaults.withCredentials = true
     const url = `http://localhost:5020/update_ec2/${theId}`
     const url2 = `http://localhost:5020/demand/${demand_apply}`
     const updated_data = {
@@ -312,35 +316,47 @@ const handle_Update_DB = async() => {
 
 
   return <>
-  <div className="apply_container">
-    <form className="form" method="POST" id="the_form_demand" onSubmit={handle_Demand_Request}>
-    
-    <input type="text" placeholder='需求單單號' ref={demand_request_default} name="demand_request" className="form-control demand_input" id="demand" onChange={demand_apply_ChangeHandler} />
-    <button type="submit" id="demand_save" className="main">確認</button>
-    
-    </form>
+{/* 只有系統管理課的同仁可以進入此路徑/backend */}
+{encryptStorage1.getItem('query5').dn.split(',')[1] === 'OU=MLH_系統管理' &&
 
-   
-<BackendEC2Context.Provider value={response} >
-  
-     
-     
-      <BackendEC2TableList demand_apply={demand_apply} alert={alert} tem_demand={tem_demand} deleteEC2={deleteEC2} editEC2={editEC2}/>
-
-      {loading && <div className="clip_loader2"><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
-
-
-
-     <BackendEditEC2Form demand_default={demand_default} server_name_default={server_name_default} os_default={os_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
-      ip_ChangeHandler={ip_ChangeHandler} cancel={cancel} subnet={subnet} handle_Update_DB={handle_Update_DB}/> 
-    
-    
+<div>
+    <div className='bar_ad_settings'>
+        <div className="username">{
+         encryptStorage1.getItem('query5').sAMAccountName + ' ' +
+         encryptStorage1.getItem('query5').displayName
+        }</div> 
+        <Logout />
+    </div>
+    <div className="apply_container">
+      <form className="form" method="POST" id="the_form_demand" onSubmit={handle_Demand_Request}>
+      
+      <input type="text" placeholder='需求單單號' ref={demand_request_default} name="demand_request" className="form-control demand_input" id="demand" onChange={demand_apply_ChangeHandler} />
+      <button type="submit" id="demand_save_backend" className="main">確認</button>
+      
+      </form>
 
     
-</BackendEC2Context.Provider>
-</div> 
+  <BackendEC2Context.Provider value={response} >
+    
+      
+      
+        <BackendEC2TableList demand_apply={demand_apply} alert={alert} tem_demand={tem_demand} deleteEC2={deleteEC2} editEC2={editEC2}/>
+
+        {loading && <div className="clip_loader2"><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
+
+
+
+      <BackendEditEC2Form demand_default={demand_default} server_name_default={server_name_default} os_default={os_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
+        ip_ChangeHandler={ip_ChangeHandler} cancel={cancel} subnet={subnet} handle_Update_DB={handle_Update_DB}/> 
+      
+      
+
+      
+  </BackendEC2Context.Provider>
+    </div> 
+</div>
+}
   </>
-   
   
 }
 

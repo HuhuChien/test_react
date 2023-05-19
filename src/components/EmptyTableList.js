@@ -6,6 +6,8 @@ const EmptyTableList = () => {
           <thead className="">
             <tr>
               <th scope="col">需求單單號</th>
+              <th scope="col">申請人</th>
+              <th scope="col">申請人部門</th>
               <th scope="col">雲端主機名稱</th>
               <th scope="col">雲端主機作業系統</th>
               <th scope="col">雲端主機規格</th>

@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import { BackendEC2Context } from './BackendEC2'
 
-
+import {encryptStorage1} from '../App'
 
 
 const BackendEditEC2Form = ({demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,handle_Update_DB,subnet}) => {
@@ -19,13 +19,32 @@ const BackendEditEC2Form = ({demand_default,server_name_default,os_default,resou
 
         <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit_backend" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         
-        <div className="modal-dialog modal-xl">
+        <div className="modal-dialog modal-lg">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
               <form className="form" id="the_form">
-    
+              <div className="form-row">
+                        <div className="form-group col-md-4">
+                          <label htmlFor="user_displayName">申請人</label>
+                          <input type="text" value={encryptStorage1.getItem('query5').cn} disabled={true} name="user_displayName" className="form-control" id="user_displayName"/>
+                        </div>
+                      </div> 
+
+                      <div className="form-row">
+                        <div className="form-group col-md-4">
+                          <label htmlFor="employee_numnber">申請人員編</label>
+                          <input type="text" value={encryptStorage1.getItem('query5').sAMAccountName} disabled={true} name="employee_numnber" className="form-control" id="employee_numnber"/>
+                        </div>
+                      </div> 
+
+                      <div className="form-row">
+                        <div className="form-group col-md-4">
+                          <label htmlFor="employee_department">申請人部門</label>
+                          <input type="text" value={encryptStorage1.getItem('query5').dn.split(",")[1].split('_')[1]} disabled={true} name="employee_numnber" className="form-control" id="employee_department"/>
+                        </div>
+                      </div> 
 
                      <div className="form-row">
                         <div className="form-group col-md-4">

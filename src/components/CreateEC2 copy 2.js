@@ -10,16 +10,17 @@ import EditEC2Form from './EditEC2Form'
 import SearchEC2TableList from './SearchEC2TableList';
 import Search from './Search';
 import Logout from './Logout';
+//import $ from 'jquery'; 
 import ClipLoader from "react-spinners/ClipLoader";
 import {encryptStorage1} from '../App'
-//import $ from 'jquery'; 
-
 
 
 export const EC2Context = React.createContext()
 
 
 const CreateEC2 = ({setQuery,query4}) => {
+  //const ref = useRef()
+  console.log(query4)
   const [theId,setTheid] = useState('')
   const [demand,setDemand] = useState('')
   const [ec2Name,setEc2Name] = useState('')
@@ -125,10 +126,10 @@ const CreateEC2 = ({setQuery,query4}) => {
   const subnet_ChangeHandler = (e) => {
    
     setSubnet(e.target.value)
-    
-    if(subnet != 'DMZ1' || subnet != 'DMZ2'){
-      setIp(false)
-    }
+    //setIp(false)
+    // if(check_default.current){
+    //   check_default.current.checked = false
+    // }
 
     //dispatch({type:"SUBNET_UPDATE",payload:e.target.value}) //選DMZ時，會出現IP選項是否打勾
    
@@ -400,11 +401,10 @@ const CreateEC2 = ({setQuery,query4}) => {
 
   
   
-  console.log(encryptStorage1.getItem('query5'))
   return <>
     <EC2Context.Provider value={state} >
         
-    <div className='bar_ad_settings'>
+       <div className='bar_ad_settings'>
           <div className="username">{
            encryptStorage1.getItem('query5').sAMAccountName + ' ' + 
            encryptStorage1.getItem('query5').displayName

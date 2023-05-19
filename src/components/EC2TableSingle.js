@@ -5,7 +5,7 @@ import data from './adjust_format.json'
 import { AiFillCheckSquare  } from "react-icons/ai";
 import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
-
+import {encryptStorage1} from '../App'
 const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2}) => {
    
 
@@ -23,10 +23,9 @@ const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,dele
                   {DEMAND}
              </th> */}
 
-             <td>
-                  {DEMAND}
-             </td>
-             
+              <td>{DEMAND}</td>
+              <td>{encryptStorage1.getItem('query5').cn}</td>
+              <td>{encryptStorage1.getItem('query5').dn.split(",")[1].split('_')[1]}</td>
               <td>{EC2NAME}</td>
               <td>{new_OS}</td>
               <td>{new_RESOURCE}</td>
