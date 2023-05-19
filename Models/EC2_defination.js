@@ -6,6 +6,22 @@ const moment = require('moment-timezone');
 
 var Terraform_data_Schemma = new mongoose.Schema({
     
+    
+    AD_sAMAccountName: {
+        type:String,
+        required:[true,'must provide AD_sAMAccountName'],
+        default:"路人甲"
+     
+    },
+    
+    AD_displayName: {
+        type:String,
+        //required:[true,'must provide demand'],
+        default:"路人甲displayName"
+     
+    },
+    
+    
     demand: {
         type:String,
         required:[true,'must provide demand'],
@@ -51,6 +67,9 @@ var Terraform_data_Schemma = new mongoose.Schema({
 
 
 })
+
+
+
 module.exports = mongoose.model('Terraform_data',Terraform_data_Schemma)
 
 
